@@ -15,6 +15,7 @@ A smart contract that automates payments, royalties, and removes the need for ce
 A GitHub-based versioning system that documents and evolves the protocol with each cycle
 A public-facing web storefront (React UI) for para-market circulation of works
 An open invitation to fork, modify, and reapply the model for other self-organized artist cohorts
+
 **Who It's For**
 
 coldstart is designed for artists, designers, and theorists who are:
@@ -23,6 +24,7 @@ Interested in building collective infrastructure for production and distribution
 Operating outside (or in critical relation to) traditional galleries and markets
 Eager to engage with technological tooling like smart contracts, GitHub, and digital fabrication workflows
 Committed to modeling alternatives, rather than merely critiquing dominant systems
+
 **How It Works**
 
 Each iteration follows a simple structure:
@@ -42,6 +44,7 @@ Minting and edition management are restricted to the contract owner (admin). Met
 Frontend:
 React-based UI (using Vite) for interacting with the smart contract.
 The UI enables artists, production partners, and operators to register wallet addresses, set edition information, and manage basic operations without coding.
+
 **Repository Contents**
 
 The current protocol version
@@ -50,6 +53,7 @@ Submission templates
 Documentation of core principles (4E / 3I models)
 Editable diagrams and planning documents
 React UI code (see /front-end or /artist-printer-ui as appropriate)
+
 **License**
 
 coldstart is released under an MIT License, and all contributors are encouraged to fork, adapt, and extend the protocol.

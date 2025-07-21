@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>coldstart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-sm {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-lg {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            color: #111;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 32px;
+        }
+
+        nav button, nav a {
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            color: #333;
+            text-decoration: none;
+        }
+
+        nav button:hover, nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Gallery Grid */
+        .gallery {
+            padding: 48px 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .gallery-item {
+            cursor: pointer;
+        }
+
+        .gallery-image {
+            aspect-ratio: 4/5;
+            background: #f3f4f6;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-image img {
+            transform: scale(1.05);
+        }
+
+        .gallery-info h3 {
+            font-weight: 500;
+            color: #111;
+            margin-bottom: 4px;
+        }
+
+        .gallery-info .artist {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .gallery-info .description {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            padding: 48px 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+
+        .footer-section h3 {
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .footer-section p {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .footer-section a {
+            font-size: 14px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Work Detail Page */
+        .work-detail-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 48px 24px;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .work-image-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 32px;
+        }
+
+        .work-detail-image {
+            width: 100%;
+            height: auto;
+            border: 20px solid #333;
+            background: white;
+            padding: 20px;
+        }
+
+        .work-info-container {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .work-url {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .work-description {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            white-space: pre-line;
+        }
+
+        .work-artist {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 24px;
+        }
+
+        .work-navigation {
+            margin-top: 32px;
+        }
+
+        .nav-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #333;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dot.sold {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .nav-dot:hover {
+            border-color: #666;
+        }
+
+        .nav-dot.sold:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+        }
+
+        /* Navigation Arrows */
+        .work-nav-arrows {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            padding: 0 24px;
+        }
+
+        .nav-arrow {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            pointer-events: auto;
+            user-select: none;
+        }
+
+        .nav-arrow:hover {
+            background: #f3f4f6;
+            color: #111;
+        }
+
+        .nav-arrow:disabled {
+            color: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        .nav-arrow:disabled:hover {
+            background: none;
+            color: #d1d5db;
+        }
+
+        @media (max-width: 768px) {
+            .work-nav-arrows {
+                padding: 0 12px;
+            }
+            
+            .nav-arrow {
+                font-size: 20px;
+                padding: 8px;
+            }
+        }
+
+        /* Register Page */
+        .register-page {
+            min-height: 100vh;
+            background: white;
+        }
+
+        .register-content {
+            padding: 48px 0;
+        }
+
+        .instructions {
+            margin-bottom: 32px;
+            color: #6b7280;
+            line-height: 1.7;
+        }
+
+        .register-section {
+            margin-bottom: 48px;
+        }
+
+        .register-section h2 {
+            font-size: 20px;
+            font-weight: 500;
+            color: #111;
+            margin-bottom: 16px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .input-group button, .btn {
+            padding: 8px 16px;
+            background: #111;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .input-group button:hover, .btn:hover {
+            background: #374151;
+        }
+
+        .form-field {
+            margin-bottom: 16px;
+        }
+
+        .form-field input, .form-field select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Slider Styles */
+        .slider-container {
+            margin-bottom: 24px;
+        }
+
+        .slider-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            background: #bfdbfe;
+            border-radius: 8px;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #1f2937;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #1f2937;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .total-display {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 16px;
+        }
+
+        .total-display .error {
+            color: #ef4444;
+        }
+
+        .file-upload {
+            margin: 16px 0;
+        }
+
+        .file-upload label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .file-upload input[type="file"] {
+            display: block;
+            width: 100%;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .file-selected {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .btn-full {
+            width: 100%;
+            padding: 12px 16px;
+            font-weight: 500;
+        }
+
+        .btn-disabled {
+            background: #d1d5db;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .btn-disabled:hover {
+            background: #d1d5db;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container, .container-sm, .container-lg {
+                padding: 0 16px;
+            }
+
+            .header-content {
+                padding: 0 16px;
+            }
+
+            nav {
+                gap: 16px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div id="landing-page">
+        <header>
+            <div class="header-content">
+                <a href="#" class="logo">coldstart</a>
+                <nav>
+                    <button onclick="showRegister()">Register</button>
+                    <button onclick="showAbout()">About</button>
+                    <a href="#protocol">Protocol</a>
+                </nav>
+            </div>
+        </header>
+
+        <section class="gallery">
+            <div class="container-lg">
+                <div class="gallery-grid" id="gallery-grid">
+                    <!-- Gallery items will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-section">
+                        <h3>Current Cycle</h3>
+                        <p>v1.0 • August 2024</p>
+                        <p>8 contributors • Centralized production via Raven Lake Studios • Smart contract automation • Open-source protocol</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Protocol</h3>
+                        <p>Fork this cycle • Modify the structure • Deploy your own version</p>
+                        <a href="https://github.com/hughsdstudio/coldstart">View on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Work Detail Page -->
+    <div id="work-detail-page" class="register-page hidden">
+        <header>
+            <div class="header-content">
+                <a href="#" class="logo">coldstart</a>
+                <button onclick="showLanding()">← Back to Gallery</button>
+            </div>
+        </header>
+
+        <div class="work-detail-container">
+            <!-- Navigation Arrows -->
+            <div class="work-nav-arrows">
+                <button id="prev-work" class="nav-arrow" onclick="navigateWork(-1)" title="Previous work">‹</button>
+                <button id="next-work" class="nav-arrow" onclick="navigateWork(1)" title="Next work">›</button>
+            </div>
+            
+            <div class="work-image-container">
+                <img id="work-detail-image" src="" alt="" class="work-detail-image">
+            </div>
+            <div class="work-info-container">
+                <div id="work-detail-url" class="work-url"></div>
+                <div id="work-detail-description" class="work-description"></div>
+                <div id="work-detail-artist" class="work-artist"></div>
+                
+                <!-- Edition Purchase Interface -->
+                <div class="work-navigation">
+                    <div class="edition-info" style="margin-bottom: 16px; font-size: 14px; color: #6b7280;">
+                        Click circles below to purchase editions
+                    </div>
+                    <div class="nav-dots" id="nav-dots">
+                        <!-- Edition dots will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about-page" class="register-page hidden">
+        <header>
+            <div class="header-content">
+                <a href="#" class="logo">coldstart</a>
+                <button onclick="showLanding()">← Back to Gallery</button>
+            </div>
+        </header>
+
+        <div class="container-sm register-content">
+            <div style="margin-bottom: 48px;">
+                <h2 style="font-size: 28px; font-weight: 300; margin-bottom: 24px; line-height: 1.3;">A Protocol for Open Source Modeling, Cooperative Production, and Para-Market Circulation</h2>
+                
+                <div style="space-y: 24px; line-height: 1.7; color: #374151;">
+                    <p style="margin-bottom: 24px;">coldstart is a minimal protocol for coordinating collective production, circulation, and iterative versioning of work among artists, designers, and theorists operating outside traditional gallery and market infrastructures. It draws inspiration from open-source ecosystems and smart contract governance models, but retools them toward a new kind of para-DAO: a decentralized yet composable apparatus for organizing practical autonomy rather than financial speculation.</p>
+                    
+                    <p style="margin-bottom: 24px;">Where traditional DAOs aim to automate ownership and financial operations across a network, coldstart operates as a cultural infrastructure DAO: a recursive, forkable architecture that distributes agency, centralizes production logistics, and holds no permanent identity. Its real structure lives not in the visual design of a website or the continuity of a brand, but in the smart contracts and GitHub repository that encode and document each cycle of the project.</p>
+                    
+                    <p style="margin-bottom: 24px;">Each cohort of contributors is temporally aligned to produce a finite set of works using a shared production partner, governed by a smart contract that automates royalties and removes the need for central gatekeeping. At the end of each cycle, the cohort reconvenes to review, critique, and iterate the protocol itself—submitting edits and improvements back to the GitHub repo. This recursive governance loop ensures that the structure remains alive to its own limitations and capable of speculative mutation.</p>
+                    
+                    <p style="margin-bottom: 32px;">In this sense, coldstart does not attempt to "disrupt" the art world through new forms of hype or scale—it models a para-market alternative, where the means of production and circulation are held collectively and updated continuously.</p>
+                    
+                    <div style="background: #f9fafb; padding: 24px; border-left: 4px solid #374151; margin: 32px 0;">
+                        <h3 style="font-weight: 500; margin-bottom: 16px;">It offers:</h3>
+                        <ul style="list-style: none; padding: 0; space-y: 12px;">
+                            <li style="margin-bottom: 12px;">• A shared infrastructure that centralizes execution while decentralizing authorship</li>
+                            <li style="margin-bottom: 12px;">• A smart contract that formalizes transparency, automates distribution, and encodes value splits</li>
+                            <li style="margin-bottom: 12px;">• A recursive model that enshrines iteration as a structural principle, not a postmortem add-on</li>
+                            <li style="margin-bottom: 12px;">• A lightweight toolkit that can be forked and re-deployed without permission or brand alignment</li>
+                        </ul>
+                    </div>
+                    
+                    <p style="margin-bottom: 24px;">As a para-DAO, coldstart is not a "platform," not an institution, not a brand. It is a functional scaffolding—a set of minimal operations designed to return agency to cultural workers and offer a versionable architecture for those seeking alternatives to the ossified structures of the existing market structure.</p>
+                    
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e5e7eb;">
+                        <p style="font-size: 14px; color: #6b7280;">
+                            The name coldstart draws from the general lexicon of systems engineering, where a "cold start" refers to the challenge of initiating a system without any pre-existing state—no cached memory, no prior inputs, no warm infrastructure already running. It names a moment of bootstrapping: where the system must be activated from nothing, assembled on demand rather than run continuously.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="register-page" class="register-page hidden">
+        <header>
+            <div class="header-content">
+                <a href="#" class="logo">coldstart</a>
+                <button onclick="showLanding()">← Back to Gallery</button>
+            </div>
+        </header>
+
+        <div class="container-sm register-content">
+            <div class="instructions">
+                <p>Instructions for Using Coldstart • Fill out all required details to create a new edition. • Editions can then be minted and managed on-chain. • No coding experience needed—just enter info and submit!</p>
+            </div>
+
+            <!-- Register Artist -->
+            <div class="register-section">
+                <h2>Register Artist</h2>
+                <div class="input-group">
+                    <input type="text" id="artist-wallet" placeholder="Artist Wallet Address">
+                    <button onclick="registerArtist()">Register</button>
+                </div>
+            </div>
+
+            <!-- Register Production Partner -->
+            <div class="register-section">
+                <h2>Register Production Partner</h2>
+                <div class="input-group">
+                    <input type="text" id="production-wallet" placeholder="Production Partner Wallet Address">
+                    <button onclick="registerProduction()">Register</button>
+                </div>
+            </div>
+
+            <!-- Register Operator -->
+            <div class="register-section">
+                <h2>Register Operator</h2>
+                <div class="input-group">
+                    <input type="text" id="operator-wallet" placeholder="Operator Wallet Address">
+                    <button onclick="registerOperator()">Register</button>
+                </div>
+            </div>
+
+            <!-- Register Edition -->
+            <div class="register-section">
+                <h2>Register Edition</h2>
+                
+                <div class="form-field">
+                    <input type="text" id="parent-edition" placeholder="Parent Edition ID">
+                </div>
+                
+                <div class="form-field">
+                    <input type="text" id="operator-address" placeholder="Operator Address">
+                </div>
+                
+                <div class="form-field">
+                    <input type="text" id="artist-address" placeholder="Artist Address">
+                </div>
+                
+                <div class="form-field">
+                    <input type="text" id="production-address" placeholder="Production Partner Address">
+                </div>
+                
+                <div class="form-field">
+                    <input type="number" id="sale-price" placeholder="Sale Price">
+                </div>
+                
+                <div class="form-field">
+                    <input type="number" id="edition-size" placeholder="Edition Size">
+                </div>
+                
+                <div class="form-field">
+                    <input type="number" id="production-cost" placeholder="Production Cost">
+                </div>
+                
+                <div class="form-field">
+                    <input type="url" id="artwork-uri" placeholder="Artwork URI">
+                </div>
+
+                <!-- Revenue Split Sliders -->
+                <div class="slider-container">
+                    <label class="slider-label">Artist Share: <span id="artist-percent">34</span>%</label>
+                    <input type="range" id="artist-slider" class="slider" min="0" max="100" value="34">
+                </div>
+
+                <div class="slider-container">
+                    <label class="slider-label">Production Partner Share: <span id="production-percent">33</span>%</label>
+                    <input type="range" id="production-slider" class="slider" min="0" max="100" value="33">
+                </div>
+
+                <div class="slider-container">
+                    <label class="slider-label">Operator Share: <span id="operator-percent">33</span>%</label>
+                    <input type="range" id="operator-slider" class="slider" min="0" max="100" value="33">
+                </div>
+
+                <div class="total-display">
+                    Total: <span id="total-percent">100</span>% <span id="total-error" class="error hidden">(Must equal 100%)</span>
+                </div>
+
+                <!-- File Upload -->
+                <div class="file-upload">
+                    <label>Attach Artwork:</label>
+                    <input type="file" id="artwork-file" accept="image/*,.pdf">
+                    <div id="file-selected" class="file-selected hidden"></div>
+                </div>
+
+                <button id="register-edition-btn" class="btn btn-full" onclick="registerEdition()">
+                    Register Edition
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample gallery data with edition tracking
+        const sampleWorks = [
+            {
+                id: 1,
+                title: "Study for Distribution",
+                artist: "Hugh Scott-Douglas",
+                year: "2024",
+                image: "https://picsum.photos/600/750?random=1",
+                description: "3d Printed Litho Pane and Plotter drawing on Arches Paper\n14 14x20 - edition of 5 + 2 ap",
+                url: "https://distributedagency.net/bosch-6/",
+                price: "$1,200",
+                editions: [false, false, false, false, false] // 5 editions, all available
+            },
+            {
+                id: 2,
+                title: "Protocol Study #1",
+                artist: "Artist Name",
+                year: "2024",
+                image: "https://picsum.photos/600/750?random=2",
+                description: "Conceptual framework for distributed systems\n18x24 - edition of 10 + 3 ap",
+                url: "https://example.com/work-2",
+                price: "$1,500",
+                editions: [false, false, false, false, false]
+            },
+            {
+                id: 3,
+                title: "Recursive Diagram",
+                artist: "Another Artist",
+                year: "2024",
+                image: "https://picsum.photos/600/750?random=3",
+                description: "Speculative proposal for new infrastructures\n16x20 - edition of 8 + 2 ap",
+                url: "https://example.com/work-3",
+                price: "$900",
+                editions: [false, false, false, false, false]
+            },
+            {
+                id: 4,
+                title: "Model for Collaboration",
+                artist: "Third Artist",
+                year: "2024",
+                image: "https://picsum.photos/600/750?random=4",
+                description: "Serialized output exploring collective production\n20x30 - edition of 6 + 2 ap",
+                url: "https://example.com/work-4",
+                price: "$1,800",
+                editions: [false, false, false, false, false]
+            },
+            {
+                id: 5,
+                title: "System Architecture",
+                artist: "Fourth Artist",
+                year: "2024",
+                image: "https://picsum.photos/600/750?random=5",
+                description: "Open-source model for cultural infrastructure\n12x16 - edition of 15 + 3 ap",
+                url: "https://example.com/work-5",
+                price: "$750",
+                editions: [false, false, false, false, false]
+            },
+            {
+                id: 6,
+                title: "Protocol Iteration",
+                artist: "Fifth Artist",
+                year: "2024",
+                image: "https://picsum.photos/600/750?random=6",
+                description: "Forkable structure for distributed authorship\n24x36 - edition of 4 + 1 ap",
+                url: "https://example.com/work-6",
+                price: "$2,200",
+                editions: [false, false, false, false, false]
+            },
+            {
+                id: 7,
+                title: "Distributed Network",
+                artist: "Sixth Artist",
+                year: "2024",
+                image: "https://picsum.photos/600/750?random=7",
+                description: "Modular system for collective agency\n22x28 - edition of 7 + 2 ap",
+                url: "https://example.com/work-7",
+                price: "$1,350",
+                editions: [false, false, false, false, false]
+            },
+            {
+                id: 8,
+                title: "Forkable Structure",
+                artist: "Seventh Artist",
+                year: "2024",
+                image: "https://picsum.photos/600/750?random=8",
+                description: "Open-source methodology for cultural production\n18x24 - edition of 12 + 3 ap",
+                url: "https://example.com/work-8",
+                price: "$1,100",
+                editions: [false, false, false, false, false]
+            }
+        ];
+
+        // Revenue splits state
+        let splits = {
+            artist: 34,
+            production: 33,
+            operator: 33
+        };
+
+        // Current work state
+        let currentWorkIndex = 0;
+
+        // Navigation functions
+        function showLanding() {
+            document.getElementById('landing-page').classList.remove('hidden');
+            document.getElementById('register-page').classList.add('hidden');
+            document.getElementById('about-page').classList.add('hidden');
+            document.getElementById('work-detail-page').classList.add('hidden');
+        }
+
+        function showRegister() {
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('register-page').classList.remove('hidden');
+            document.getElementById('about-page').classList.add('hidden');
+            document.getElementById('work-detail-page').classList.add('hidden');
+        }
+
+        function showAbout() {
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('register-page').classList.add('hidden');
+            document.getElementById('about-page').classList.remove('hidden');
+            document.getElementById('work-detail-page').classList.add('hidden');
+        }
+
+        function showWorkDetail(workIndex) {
+            currentWorkIndex = workIndex;
+            const work = sampleWorks[workIndex];
+            
+            // Update work detail content
+            document.getElementById('work-detail-image').src = work.image;
+            document.getElementById('work-detail-image').alt = work.title;
+            document.getElementById('work-detail-url').textContent = work.url;
+            document.getElementById('work-detail-description').textContent = work.description;
+            document.getElementById('work-detail-artist').textContent = work.artist;
+            
+            // Update arrow button states
+            updateArrowButtons();
+            
+            // Create edition purchase dots
+            const navDots = document.getElementById('nav-dots');
+            navDots.innerHTML = '';
+            work.editions.forEach((isSold, editionIndex) => {
+                const dot = document.createElement('div');
+                dot.className = `nav-dot ${isSold ? 'sold' : ''}`;
+                dot.title = `Edition ${editionIndex + 1} - ${work.price} ${isSold ? '(SOLD)' : '(Available)'}`;
+                
+                // Add click handler for purchasing
+                dot.addEventListener('click', function() {
+                    if (!isSold) {
+                        purchaseEdition(workIndex, editionIndex);
+                    }
+                });
+                
+                navDots.appendChild(dot);
+            });
+            
+            // Show work detail page
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('register-page').classList.add('hidden');
+            document.getElementById('about-page').classList.add('hidden');
+            document.getElementById('work-detail-page').classList.remove('hidden');
+        }
+
+        function navigateWork(direction) {
+            const newIndex = currentWorkIndex + direction;
+            
+            // Check bounds
+            if (newIndex >= 0 && newIndex < sampleWorks.length) {
+                showWorkDetail(newIndex);
+            }
+        }
+
+        function updateArrowButtons() {
+            const prevBtn = document.getElementById('prev-work');
+            const nextBtn = document.getElementById('next-work');
+            
+            // Disable/enable based on current position
+            prevBtn.disabled = currentWorkIndex === 0;
+            nextBtn.disabled = currentWorkIndex === sampleWorks.length - 1;
+        }
+
+        function purchaseEdition(workIndex, editionIndex) {
+            const work = sampleWorks[workIndex];
+            
+            if (confirm(`Purchase Edition ${editionIndex + 1} of "${work.title}" for ${work.price}?`)) {
+                // Mark edition as sold
+                work.editions[editionIndex] = true;
+                
+                // Update the dot display
+                showWorkDetail(workIndex);
+                
+                // Show success message
+                alert(`Edition ${editionIndex + 1} purchased successfully!\n\nWork: ${work.title}\nArtist: ${work.artist}\nPrice: ${work.price}\nEdition: ${editionIndex + 1}/5`);
+                
+                console.log('Edition purchased:', {
+                    work: work.title,
+                    artist: work.artist,
+                    edition: editionIndex + 1,
+                    price: work.price
+                });
+            }
+        }
+
+        // Initialize gallery
+        function initGallery() {
+            const galleryGrid = document.getElementById('gallery-grid');
+            
+            sampleWorks.forEach((work, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.style.cursor = 'pointer';
+                galleryItem.innerHTML = `
+                    <div class="gallery-image">
+                        <img src="${work.image}" alt="${work.title}">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>${work.title}</h3>
+                        <div class="artist">${work.artist}, ${work.year}</div>
+                        <div class="description">${work.description.split('\n')[0]}</div>
+                    </div>
+                `;
+                
+                // Add click event listener
+                galleryItem.addEventListener('click', function() {
+                    console.log('Clicked work:', index, work.title);
+                    showWorkDetail(index);
+                });
+                
+                galleryGrid.appendChild(galleryItem);
+            });
+        }
+
+        // Revenue split functions
+        function updateSplitDisplay() {
+            document.getElementById('artist-percent').textContent = splits.artist;
+            document.getElementById('production-percent').textContent = splits.production;
+            document.getElementById('operator-percent').textContent = splits.operator;
+            
+            const total = splits.artist + splits.production + splits.operator;
+            document.getElementById('total-percent').textContent = total;
+            
+            const errorSpan = document.getElementById('total-error');
+            const registerBtn = document.getElementById('register-edition-btn');
+            
+            if (total !== 100) {
+                errorSpan.classList.remove('hidden');
+                registerBtn.classList.add('btn-disabled');
+                registerBtn.disabled = true;
+            } else {
+                errorSpan.classList.add('hidden');
+                registerBtn.classList.remove('btn-disabled');
+                registerBtn.disabled = false;
+            }
+        }
+
+        function handleSliderChange(role, value) {
+            const newValue = parseInt(value);
+            const newSplits = { ...splits, [role]: newValue };
+            
+            // Only update if total doesn't exceed 100
+            const total = Object.values(newSplits).reduce((sum, val) => sum + val, 0);
+            if (total <= 100) {
+                splits = newSplits;
+                updateSplitDisplay();
+            }
+        }
+
+        // Registration functions
+        function registerArtist() {
+            const wallet = document.getElementById('artist-wallet').value;
+            if (wallet) {
+                console.log('Registering artist:', wallet);
+                alert('Artist registered successfully! (Mock registration)');
+                document.getElementById('artist-wallet').value = '';
+            } else {
+                alert('Please enter a wallet address');
+            }
+        }
+
+        function registerProduction() {
+            const wallet = document.getElementById('production-wallet').value;
+            if (wallet) {
+                console.log('Registering production partner:', wallet);
+                alert('Production partner registered successfully! (Mock registration)');
+                document.getElementById('production-wallet').value = '';
+            } else {
+                alert('Please enter a wallet address');
+            }
+        }
+
+        function registerOperator() {
+            const wallet = document.getElementById('operator-wallet').value;
+            if (wallet) {
+                console.log('Registering operator:', wallet);
+                alert('Operator registered successfully! (Mock registration)');
+                document.getElementById('operator-wallet').value = '';
+            } else {
+                alert('Please enter a wallet address');
+            }
+        }
+
+        function registerEdition() {
+            const editionData = {
+                parentEditionId: document.getElementById('parent-edition').value,
+                operatorAddress: document.getElementById('operator-address').value,
+                artistAddress: document.getElementById('artist-address').value,
+                productionPartnerAddress: document.getElementById('production-address').value,
+                salePrice: document.getElementById('sale-price').value,
+                editionSize: document.getElementById('edition-size').value,
+                productionCost: document.getElementById('production-cost').value,
+                artworkURI: document.getElementById('artwork-uri').value,
+                splits: splits,
+                file: document.getElementById('artwork-file').files[0]
+            };
+
+            console.log('Edition Data:', editionData);
+            alert('Edition registered successfully! (Mock submission)');
+        }
+
+        // File upload handler
+        function handleFileUpload() {
+            const fileInput = document.getElementById('artwork-file');
+            const fileSelected = document.getElementById('file-selected');
+            
+            if (fileInput.files.length > 0) {
+                fileSelected.textContent = `Selected: ${fileInput.files[0].name}`;
+                fileSelected.classList.remove('hidden');
+            } else {
+                fileSelected.classList.add('hidden');
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initGallery();
+            updateSplitDisplay();
+
+            // Add slider event listeners
+            document.getElementById('artist-slider').addEventListener('input', function(e) {
+                handleSliderChange('artist', e.target.value);
+            });
+
+            document.getElementById('production-slider').addEventListener('input', function(e) {
+                handleSliderChange('production', e.target.value);
+            });
+
+            document.getElementById('operator-slider').addEventListener('input', function(e) {
+                handleSliderChange('operator', e.target.value);
+            });
+
+            // Add file upload event listener
+            document.getElementById('artwork-file').addEventListener('change', handleFileUpload);
+        });
+    </script>
+</body>
+</html>

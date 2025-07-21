@@ -1,8 +1,4 @@
-# Features & Functionality
-
-## Overview
-
-Coldstart is a minimal protocol for coordinating collective production, circulation, and iterative versioning of work among artists, designers, and theorists operating outside traditional gallery and market infrastructures. The embedded website serves as the interface for this decentralized cultural infrastructure DAO, combining gallery display, edition sales, and smart contract registration in a single platform.
+# Website Features & Functionality
 
 ## Core Features
 

@@ -164,17 +164,45 @@
         /* Work Detail Page */
         .work-detail-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-direction: row;
+            align-items: flex-start;
             padding: 48px 24px;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             position: relative;
+            gap: 48px;
+        }
+
+        .work-detail-left {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .work-detail-right {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .work-detail-header {
+            margin-bottom: 24px;
+        }
+
+        .work-detail-header h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #111;
+        }
+
+        .work-detail-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 32px;
         }
 
         .work-image-container {
             width: 100%;
-            max-width: 600px;
             margin-bottom: 32px;
         }
 
@@ -187,8 +215,7 @@
         }
 
         .work-info-container {
-            text-align: center;
-            max-width: 600px;
+            text-align: left;
         }
 
         .work-url {
@@ -217,7 +244,7 @@
 
         .nav-dots {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             gap: 8px;
         }
 
@@ -285,7 +312,18 @@
             color: #d1d5db;
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
+            .work-detail-container {
+                flex-direction: column;
+                gap: 32px;
+            }
+            
+            .work-detail-left,
+            .work-detail-right {
+                max-width: 100%;
+            }
+            
             .work-nav-arrows {
                 padding: 0 12px;
             }
@@ -293,6 +331,10 @@
             .nav-arrow {
                 font-size: 20px;
                 padding: 8px;
+            }
+
+            .nav-dots {
+                justify-content: center;
             }
         }
 
@@ -547,21 +589,37 @@
                 <button id="next-work" class="nav-arrow" onclick="navigateWork(1)" title="Next work">›</button>
             </div>
             
-            <div class="work-image-container">
-                <img id="work-detail-image" src="" alt="" class="work-detail-image">
+            <!-- Left Column: About and Details -->
+            <div class="work-detail-left">
+                <div class="work-detail-header">
+                    <h1>About</h1>
+                </div>
+                <div id="work-detail-writeup" class="work-detail-text">
+                    <!-- Extended writeup will be populated by JavaScript -->
+                </div>
             </div>
-            <div class="work-info-container">
-                <div id="work-detail-url" class="work-url"></div>
-                <div id="work-detail-description" class="work-description"></div>
-                <div id="work-detail-artist" class="work-artist"></div>
-                
-                <!-- Edition Purchase Interface -->
-                <div class="work-navigation">
-                    <div class="edition-info" style="margin-bottom: 16px; font-size: 14px; color: #6b7280;">
-                        Click circles below to purchase editions
-                    </div>
-                    <div class="nav-dots" id="nav-dots">
-                        <!-- Edition dots will be populated by JavaScript -->
+            
+            <!-- Right Column: Details and Image -->
+            <div class="work-detail-right">
+                <div class="work-detail-header">
+                    <h1>details</h1>
+                </div>
+                <div class="work-image-container">
+                    <img id="work-detail-image" src="" alt="" class="work-detail-image">
+                </div>
+                <div class="work-info-container">
+                    <div id="work-detail-url" class="work-url"></div>
+                    <div id="work-detail-description" class="work-description"></div>
+                    <div id="work-detail-artist" class="work-artist"></div>
+                    
+                    <!-- Edition Purchase Interface -->
+                    <div class="work-navigation">
+                        <div class="edition-info" style="margin-bottom: 16px; font-size: 14px; color: #6b7280;">
+                            Click circles below to purchase editions
+                        </div>
+                        <div class="nav-dots" id="nav-dots">
+                            <!-- Edition dots will be populated by JavaScript -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -735,7 +793,8 @@
                 description: "3d Printed Litho Pane and Plotter drawing on Arches Paper\n14 14x20 - edition of 5 + 2 ap",
                 url: "https://distributedagency.net/bosch-6/",
                 price: "$1,200",
-                editions: [false, false, false, false, false] // 5 editions, all available
+                editions: [false, false, false, false, false], // 5 editions, all available
+                writeup: "This work explores the tension between digital fabrication and traditional printmaking processes. Through the integration of 3D printing technology with lithographic techniques, the piece questions the boundaries of reproducibility in contemporary art practice.\n\nThe systematic approach to mark-making reflects broader concerns about automation and artistic agency. Each iteration in the edition carries subtle variations that emerge from the intersection of digital precision and material unpredictability.\n\nProduced as part of the coldstart protocol's first cycle, this work demonstrates how collaborative infrastructure can support experimental approaches to serialized production while maintaining individual artistic vision."
             },
             {
                 id: 2,
@@ -746,7 +805,8 @@
                 description: "Conceptual framework for distributed systems\n18x24 - edition of 10 + 3 ap",
                 url: "https://example.com/work-2",
                 price: "$1,500",
-                editions: [false, false, false, false, false]
+                editions: [false, false, false, false, false],
+                writeup: "A systematic investigation into the visual representation of decentralized networks and collective decision-making processes. This piece employs diagrammatic elements to map the relationships between individual agency and collective structures.\n\nThe work functions both as a theoretical proposition and a practical tool, offering viewers a framework for understanding how distributed systems operate beyond traditional hierarchical models. Each edition varies in its specific configuration, reflecting the adaptive nature of the systems it represents.\n\nCreated through the coldstart protocol, this piece embodies the very principles it seeks to visualize—emerging from collective production while maintaining conceptual coherence across its serialized iterations."
             },
             {
                 id: 3,
@@ -757,7 +817,8 @@
                 description: "Speculative proposal for new infrastructures\n16x20 - edition of 8 + 2 ap",
                 url: "https://example.com/work-3",
                 price: "$900",
-                editions: [false, false, false, false, false]
+                editions: [false, false, false, false, false],
+                writeup: "An exploration of self-modifying systems and their potential applications in cultural infrastructure. The diagram presents a speculative architecture that adapts and evolves based on use, challenging static models of institutional organization.\n\nThe recursive elements in the composition reflect the work's conceptual framework—each iteration informs the next, creating a feedback loop between production and reflection. This approach mirrors the coldstart protocol's emphasis on continuous iteration and structural evolution.\n\nThe piece proposes alternative models for cultural institutions that prioritize flexibility and responsiveness over stability and permanence, suggesting new ways of organizing collective cultural labor."
             },
             {
                 id: 4,
@@ -768,7 +829,8 @@
                 description: "Serialized output exploring collective production\n20x30 - edition of 6 + 2 ap",
                 url: "https://example.com/work-4",
                 price: "$1,800",
-                editions: [false, false, false, false, false]
+                editions: [false, false, false, false, false],
+                writeup: "A visual methodology for organizing collaborative artistic practice that moves beyond traditional models of individual authorship. The work presents a framework for shared creative labor that maintains both collective coherence and individual contribution.\n\nThrough systematic variation across the edition, each piece demonstrates how collaborative processes can generate difference while maintaining conceptual unity. The serialized approach challenges assumptions about originality and authenticity in contemporary art practice.\n\nDeveloped within the coldstart infrastructure, this work serves as both an artwork and a proposal—suggesting new models for how artists might organize their labor and distribute their work outside traditional market structures."
             },
             {
                 id: 5,
@@ -779,7 +841,8 @@
                 description: "Open-source model for cultural infrastructure\n12x16 - edition of 15 + 3 ap",
                 url: "https://example.com/work-5",
                 price: "$750",
-                editions: [false, false, false, false, false]
+                editions: [false, false, false, false, false],
+                writeup: "A technical and conceptual blueprint for building sustainable cultural infrastructure that operates independently of traditional institutional support. The work combines architectural drawing conventions with speculative design to propose alternative organizational models.\n\nThe piece functions as both documentation and instruction manual, offering practical guidance for implementing distributed cultural systems. Its open-source approach extends to its production method—created through transparent, collaborative processes that can be replicated and modified by others.\n\nBy visualizing the technical requirements for cultural autonomy, the work challenges artists and cultural workers to consider the infrastructural dimensions of their practice and to actively participate in building alternative systems of support and circulation."
             },
             {
                 id: 6,
@@ -790,7 +853,8 @@
                 description: "Forkable structure for distributed authorship\n24x36 - edition of 4 + 1 ap",
                 url: "https://example.com/work-6",
                 price: "$2,200",
-                editions: [false, false, false, false, false]
+                editions: [false, false, false, false, false],
+                writeup: "An investigation into how cultural protocols can evolve through use, adaptation, and modification by their participants. The work presents a visual system that invites intervention and reinterpretation, embodying the principle of 'forkability' central to open-source culture.\n\nEach edition contains elements that can be isolated, modified, and recombined, suggesting how cultural works might function as modular systems rather than fixed objects. This approach challenges traditional notions of artistic completion and integrity.\n\nProduced as part of the coldstart protocol's inaugural cycle, the work demonstrates how cultural production might operate as an ongoing, collaborative process rather than a series of discrete, individual contributions. It proposes a model where works remain open to transformation and reuse."
             },
             {
                 id: 7,
@@ -801,7 +865,8 @@
                 description: "Modular system for collective agency\n22x28 - edition of 7 + 2 ap",
                 url: "https://example.com/work-7",
                 price: "$1,350",
-                editions: [false, false, false, false, false]
+                editions: [false, false, false, false, false],
+                writeup: "A visual investigation of how individual nodes within a network maintain autonomy while participating in collective action. The work maps the relationships between personal agency and systemic coordination, suggesting new models for organizing cultural and political activity.\n\nThrough its modular composition, the piece demonstrates how complex systems can emerge from simple, repeated elements. Each edition explores different configurations of the same basic components, illustrating the generative potential of systematic variation.\n\nCreated through the coldstart protocol's distributed production model, the work embodies the networked approach it seeks to visualize—emerging from individual contribution while gaining meaning through collective context and shared infrastructure."
             },
             {
                 id: 8,
@@ -812,7 +877,8 @@
                 description: "Open-source methodology for cultural production\n18x24 - edition of 12 + 3 ap",
                 url: "https://example.com/work-8",
                 price: "$1,100",
-                editions: [false, false, false, false, false]
+                editions: [false, false, false, false, false],
+                writeup: "A methodological framework that can be adapted, modified, and redistributed by others working in cultural production. The work functions simultaneously as artwork, tool, and instruction set—offering a practical approach to implementing open-source principles in creative practice.\n\nThe piece's 'forkable' nature extends beyond conceptual metaphor to practical application. Its systematic approach can be extracted, modified, and redeployed in different contexts while maintaining its core organizational logic.\n\nAs the concluding work in coldstart's first cycle, this piece serves as both culmination and beginning—demonstrating how cultural protocols might propagate and evolve through use, ensuring their continued relevance and adaptation to new contexts and communities."
             }
         ];
 
@@ -858,6 +924,7 @@
             document.getElementById('work-detail-url').textContent = work.url;
             document.getElementById('work-detail-description').textContent = work.description;
             document.getElementById('work-detail-artist').textContent = work.artist;
+            document.getElementById('work-detail-writeup').textContent = work.writeup;
             
             // Update arrow button states
             updateArrowButtons();
